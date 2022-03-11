@@ -35,4 +35,5 @@ export default {
   Subscription,
   CreditCard,
   Tag,
+  User,
 };

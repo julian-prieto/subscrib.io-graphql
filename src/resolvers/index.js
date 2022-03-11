@@ -1,27 +1,41 @@
 import { returnGenericOrFallbackType } from "../utils";
 import {
+  getAllSubscriptions,
+  getSubscriptionById,
+  createSubscription,
+  updateSubscriptionById,
+  deleteSubscriptionById,
+} from "./subscription";
+import {
   getAllCreditCards,
   getCreditCardById,
   getCreditCardByParentId,
   createCreditCard,
+  updateCreditCardById,
+  deleteCreditCardById,
 } from "./creditCard";
-import {
-  getAllSubscriptions,
-  getSubscriptionById,
-  createSubscription,
-  deleteSubscriptionById,
-} from "./subscription";
-import { createTag, getAllTags, getTagById, deleteTagById } from "./tag";
+import { createTag, getAllTags, getTagById, updateTagById, deleteTagById } from "./tag";
+import { me } from "./user";
 
 module.exports = {
-  DeleteSubscriptionByIdResponse: {
+  GenericUserResponse: {
+    __resolveType(obj) {
+      return returnGenericOrFallbackType(obj, "User");
+    },
+  },
+  GenericSubscriptionResponse: {
     __resolveType(obj) {
       return returnGenericOrFallbackType(obj, "Subscription");
     },
   },
-  DeleteTagByIdResponse: {
+  GenericTagResponse: {
     __resolveType(obj) {
       return returnGenericOrFallbackType(obj, "Tag");
+    },
+  },
+  GenericCreditCardResponse: {
+    __resolveType(obj) {
+      return returnGenericOrFallbackType(obj, "CreditCard");
     },
   },
   Subscription: {
@@ -31,18 +45,28 @@ module.exports = {
     },
   },
   Query: {
+    me,
+
     subscription: getSubscriptionById,
     subscriptions: getAllSubscriptions,
+
     creditCard: getCreditCardById,
     creditCards: getAllCreditCards,
+
     tag: getTagById,
     tags: getAllTags,
   },
   Mutation: {
     createSubscription,
+    updateSubscriptionById,
     deleteSubscriptionById,
+
     createCreditCard,
+    updateCreditCardById,
+    deleteCreditCardById,
+
     createTag,
+    updateTagById,
     deleteTagById,
   },
 };

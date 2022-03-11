@@ -11,11 +11,15 @@ const server = new ApolloServer({
   resolvers,
   context: async ({ req }) => {
     const token = req.headers.authorization || "";
-    const user = await getUserData(token);
+    const user = await getUserData(token, db);
 
     return { db, user, dataLoaders: dataLoaders(db) };
   },
-  plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
+  plugins: [
+    ApolloServerPluginLandingPageGraphQLPlayground({
+      settings: { "schema.polling.enable": false },
+    }),
+  ],
 });
 
 server.listen({ port: process.env.SERVER_PORT }).then(({ url }) => {

@@ -1,6 +1,6 @@
 import { OAuth2Client } from "google-auth-library";
 
-export const getUserData = async (token) => {
+export const getUserData = async (token, db) => {
   let cleanToken;
 
   if (token.startsWith("Bearer ")) {
@@ -19,13 +19,18 @@ export const getUserData = async (token) => {
     });
     const user = ticket.getPayload();
 
-    return {
-      email: user.email,
-      name: user.name,
-      givenName: user.given_name,
-      familyName: user.family_name,
-      picture: user.picture,
-    };
+    const [dbUser, _created] = await db.User.findOrCreate({
+      where: { email: user.email },
+      defaults: {
+        email: user.email,
+        name: user.name,
+        givenName: user.given_name,
+        familyName: user.family_name,
+        picture: user.picture,
+      },
+    });
+
+    return dbUser.toJSON();
   } catch (error) {
     return null;
   }

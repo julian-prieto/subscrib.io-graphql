@@ -43,10 +43,10 @@ module.exports = (sequelize) => {
       },
       creditCardId: {
         type: DataTypes.UUID,
-        // references: {
-        //   model: "creditcard",
-        //   key: "id",
-        // },
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
     },
     { underscored: true, paranoid: true }

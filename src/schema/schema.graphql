@@ -4,21 +4,28 @@ enum Frecuency {
   YEARLY
 }
 
+union GenericUserResponse = GenericResponse | User
+union GenericCreditCardResponse = GenericResponse | CreditCard
+union GenericTagResponse = GenericResponse | Tag
+union GenericSubscriptionResponse = GenericResponse | Subscription
+
 type GenericResponse {
   action: String!
   success: Boolean
   message: String!
 }
 
-union DeleteTagByIdResponse = GenericResponse | Tag
-union DeleteSubscriptionByIdResponse = GenericResponse | Subscription
+type User {
+  email: String!
+  name: String!
+  givenName: String!
+  familyName: String!
+  picture: String!
+}
 
 type CreditCard {
   id: ID!
   enabled: Boolean!
-  createdAt: String!
-  updatedAt: String!
-  owner: String!
   type: String!
   number: Int
 }
@@ -26,47 +33,61 @@ type CreditCard {
 type Tag {
   id: ID!
   enabled: Boolean!
-  createdAt: String!
-  updatedAt: String!
-  owner: String!
   name: String!
 }
 
 type Subscription {
   id: ID!
   enabled: Boolean!
-  createdAt: String!
-  updatedAt: String!
-  owner: String!
   title: String!
   price: Float!
   currency: String!
   tags: [Tag]
   frecuency: Frecuency!
   creditCard: CreditCard
+  image: String
 }
 
 type Query {
+  me: GenericUserResponse!
+
   subscription(id: ID!): Subscription
   subscriptions: [Subscription]
+
   creditCard(id: ID!): CreditCard
   creditCards: [CreditCard]
+
   tag(id: ID!): Tag
   tags: [Tag]
 }
 
 type Mutation {
-  createCreditCard(owner: String!, type: String!, number: Int): CreditCard!
-  createTag(owner: String!, name: String!): Tag!
-  deleteTagById(owner: String!, id: ID!): DeleteTagByIdResponse!
-  deleteSubscriptionById(owner: String!, id: ID!): DeleteSubscriptionByIdResponse!
+  createCreditCard(type: String!, number: Int): GenericCreditCardResponse!
+  updateCreditCardById(id: ID!, type: String!, number: Int): GenericCreditCardResponse!
+  deleteCreditCardById(id: ID!): GenericCreditCardResponse!
+
+  createTag(name: String!): GenericTagResponse!
+  updateTagById(id: ID!, name: String!): GenericTagResponse!
+  deleteTagById(id: ID!): GenericTagResponse!
+
   createSubscription(
-    owner: String!
     title: String!
     price: Float!
     currency: String!
     frecuency: Frecuency!
     creditCardId: String
     tags: [String]
-  ): Subscription!
+    image: String
+  ): GenericSubscriptionResponse!
+  updateSubscriptionById(
+    id: ID!
+    title: String!
+    price: Float!
+    currency: String!
+    frecuency: Frecuency!
+    creditCardId: String
+    tags: [String]
+    image: String
+  ): GenericSubscriptionResponse!
+  deleteSubscriptionById(id: ID!): GenericSubscriptionResponse!
 }
