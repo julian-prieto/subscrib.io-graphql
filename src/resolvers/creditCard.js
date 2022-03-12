@@ -2,10 +2,12 @@ import { returnGenericResponse } from "../utils";
 
 module.exports = {
   getCreditCardByParentId: async (parent, _params, ctx) => {
-    return parent.creditCardId ? await ctx.db.CreditCard.findOne({ id: parent.creditCardId }) : null;
+    return parent.creditCardId
+      ? await ctx.db.CreditCard.findOne({ where: { id: parent.creditCardId, owner: ctx.user.email } })
+      : null;
   },
   getCreditCardById: async (_parent, params, ctx) => {
-    return await ctx.db.CreditCard.findOne({ id: params.id, owner: ctx.user.email });
+    return await ctx.db.CreditCard.findOne({ where: { id: params.id, owner: ctx.user.email } });
   },
   getAllCreditCards: async (_parent, _params, ctx) => {
     return await ctx.db.CreditCard.findAll({ where: { owner: ctx.user.email } });

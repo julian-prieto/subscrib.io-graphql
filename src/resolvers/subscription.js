@@ -2,7 +2,7 @@ import { returnGenericResponse } from "../utils";
 
 module.exports = {
   getSubscriptionById: async (_parent, params, ctx) => {
-    return await ctx.db.Subscription.findOne({ id: params.id, owner: ctx.user.email });
+    return await ctx.db.Subscription.findOne({ where: { id: params.id, owner: ctx.user.email } });
   },
   getAllSubscriptions: async (_parent, _params, ctx) => {
     return await ctx.db.Subscription.findAll({ where: { owner: ctx.user.email } });
@@ -15,7 +15,7 @@ module.exports = {
       title: params.title,
       price: params.price,
       currency: params.currency,
-      frecuency: params.frecuency,
+      frequency: params.frequency,
       creditCardId: params.creditCardId,
       tags: params.tags,
       image: params.image,
@@ -25,7 +25,7 @@ module.exports = {
     if (!ctx.user) return returnGenericResponse("updateSubscriptionById", false, `Token not valid or missing.`);
     if (!params.title) return returnGenericResponse("updateSubscriptionById", false, `Title cannot be empty.`);
     if (!params.currency) return returnGenericResponse("updateSubscriptionById", false, `Currency cannot be empty.`);
-    if (!params.frecuency) return returnGenericResponse("updateSubscriptionById", false, `Frecuency cannot be empty.`);
+    if (!params.frequency) return returnGenericResponse("updateSubscriptionById", false, `Frequency cannot be empty.`);
 
     const result = await ctx.db.Subscription.update(
       {
@@ -33,7 +33,7 @@ module.exports = {
         tags: params.tags,
         price: params.price,
         currency: params.currency,
-        frecuency: params.frecuency,
+        frequency: params.frequency,
         creditCardId: params.creditCardId,
         image: params.image,
       },

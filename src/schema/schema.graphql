@@ -1,4 +1,4 @@
-enum Frecuency {
+enum Frequency {
   DAILY
   MONTHLY
   YEARLY
@@ -43,7 +43,7 @@ type Subscription {
   price: Float!
   currency: String!
   tags: [Tag]
-  frecuency: Frecuency!
+  frequency: Frequency!
   creditCard: CreditCard
   image: String
 }
@@ -74,7 +74,7 @@ type Mutation {
     title: String!
     price: Float!
     currency: String!
-    frecuency: Frecuency!
+    frequency: Frequency!
     creditCardId: String
     tags: [String]
     image: String
@@ -84,7 +84,7 @@ type Mutation {
     title: String!
     price: Float!
     currency: String!
-    frecuency: Frecuency!
+    frequency: Frequency!
     creditCardId: String
     tags: [String]
     image: String

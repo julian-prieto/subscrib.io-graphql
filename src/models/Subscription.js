@@ -36,7 +36,7 @@ module.exports = (sequelize) => {
         allowNull: false,
         default: "USD",
       },
-      frecuency: {
+      frequency: {
         type: DataTypes.STRING,
         allowNull: false,
         default: "MONTHLY",

@@ -2,7 +2,7 @@ import { returnGenericResponse } from "../utils";
 
 module.exports = {
   getTagById: async (_parent, params, ctx) => {
-    return await ctx.db.Tag.findOne({ id: params.id, owner: ctx.user.email });
+    return await ctx.db.Tag.findOne({ where: { id: params.id, owner: ctx.user.email } });
   },
   getAllTags: async (_parent, _params, ctx) => {
     return await ctx.db.Tag.findAll({ where: { owner: ctx.user.email } });
