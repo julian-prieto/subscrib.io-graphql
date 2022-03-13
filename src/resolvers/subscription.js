@@ -25,9 +25,6 @@ module.exports = {
   },
   updateSubscriptionById: async (_parent, params, ctx) => {
     if (!ctx.user) throw Error("Invalid token");
-    if (!params.title) throw Error(`Title cannot be empty.`);
-    if (!params.currency) throw Error(`Currency cannot be empty.`);
-    if (!params.frequency) throw Error(`Frequency cannot be empty.`);
 
     const result = await ctx.db.Subscription.update(
       {

@@ -68,10 +68,10 @@ type Mutation {
   ): Subscription!
   updateSubscriptionById(
     id: ID!
-    title: String!
-    price: Float!
-    currency: String!
-    frequency: Frequency!
+    title: String
+    price: Float
+    currency: String
+    frequency: Frequency
     creditCardId: String
     tags: [String]
     image: String
