@@ -1,4 +1,4 @@
-import { ApolloServer, gql } from "apollo-server";
+import { ApolloServer } from "apollo-server";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import db from "./models";
 import typeDefs from "./typeDefs";
@@ -7,7 +7,7 @@ import dataLoaders from "./dataLoaders";
 import { getUserData } from "./utils";
 
 const server = new ApolloServer({
-  typeDefs: typeDefs(gql),
+  typeDefs,
   resolvers,
   context: async ({ req }) => {
     const token = req.headers.authorization || "";
