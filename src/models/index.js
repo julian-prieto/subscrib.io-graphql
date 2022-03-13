@@ -3,21 +3,18 @@ import SubscriptionModel from "./Subscription";
 import CreditCardModel from "./CreditCard";
 import TagModel from "./Tag";
 import UserModel from "./User";
+import pg from "pg";
 
-const sequelize = new Sequelize(
-  process.env.POSTGRES_DB,
-  process.env.POSTGRES_USER,
-  process.env.POSTGRES_PASSWORD,
-  {
-    host: process.env.POSTGRES_HOST,
-    port: process.env.POSTGRES_PORT,
-    dialect: "postgres",
-    dialectOptions: {
-      ssl: true,
-    },
-    logging: false,
-  }
-);
+const sequelize = new Sequelize(process.env.POSTGRES_DB, process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
+  host: process.env.POSTGRES_HOST,
+  port: process.env.POSTGRES_PORT,
+  dialect: "postgres",
+  dialectModule: pg,
+  dialectOptions: {
+    ssl: true,
+  },
+  logging: false,
+});
 
 const CreditCard = CreditCardModel(sequelize);
 const Tag = TagModel(sequelize);
