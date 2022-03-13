@@ -19,10 +19,14 @@ module.exports = (sequelize) => {
       },
       type: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       number: {
         type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      color: {
+        type: DataTypes.STRING,
         allowNull: true,
       },
     },

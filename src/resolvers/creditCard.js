@@ -16,19 +16,21 @@ module.exports = {
   },
   createCreditCard: async (_parent, params, ctx) => {
     if (!ctx.user) throw Error("Invalid token");
+    if (!params.number && !params.type) throw Error("At least one of [type, number] must have value");
 
     return await ctx.db.CreditCard.create({
       owner: ctx.user.email,
       type: params.type,
       number: params.number,
+      color: params.color,
     });
   },
   updateCreditCardById: async (_parent, params, ctx) => {
     if (!ctx.user) throw Error("Invalid token");
-    if (!params.type) throw Error("Type cannot be empty.");
+    // if (!params.number && !params.type) throw Error("At least one of [type, number] must have value");
 
     const result = await ctx.db.CreditCard.update(
-      { type: params.type, number: params.number },
+      { type: params.type, number: params.number, color: params.color },
       {
         where: { id: params.id, owner: ctx.user.email },
         returning: true,
