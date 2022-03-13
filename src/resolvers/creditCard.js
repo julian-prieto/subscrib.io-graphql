@@ -12,7 +12,7 @@ module.exports = {
   getAllCreditCards: async (_parent, _params, ctx) => {
     if (!ctx.user) throw Error("Invalid token");
 
-    return await ctx.db.CreditCard.findAll({ where: { owner: ctx.user.email } });
+    return await ctx.db.CreditCard.findAll({ where: { owner: ctx.user.email }, order: [["createdAt", "ASC"]] });
   },
   createCreditCard: async (_parent, params, ctx) => {
     if (!ctx.user) throw Error("Invalid token");
