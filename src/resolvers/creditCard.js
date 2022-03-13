@@ -1,5 +1,3 @@
-import { returnGenericResponse } from "../utils";
-
 module.exports = {
   getCreditCardByParentId: async (parent, _params, ctx) => {
     return parent.creditCardId
@@ -7,13 +5,17 @@ module.exports = {
       : null;
   },
   getCreditCardById: async (_parent, params, ctx) => {
+    if (!ctx.user) throw Error("Invalid token");
+
     return await ctx.db.CreditCard.findOne({ where: { id: params.id, owner: ctx.user.email } });
   },
   getAllCreditCards: async (_parent, _params, ctx) => {
+    if (!ctx.user) throw Error("Invalid token");
+
     return await ctx.db.CreditCard.findAll({ where: { owner: ctx.user.email } });
   },
   createCreditCard: async (_parent, params, ctx) => {
-    if (!ctx.user) return returnGenericResponse("createCreditCard", false, `Token not valid or missing.`);
+    if (!ctx.user) throw Error("Invalid token");
 
     return await ctx.db.CreditCard.create({
       owner: ctx.user.email,
@@ -22,8 +24,8 @@ module.exports = {
     });
   },
   updateCreditCardById: async (_parent, params, ctx) => {
-    if (!ctx.user) return returnGenericResponse("updateCreditCardById", false, `Token not valid or missing.`);
-    if (!params.type) return returnGenericResponse("updateCreditCardById", false, `Type cannot be empty.`);
+    if (!ctx.user) throw Error("Invalid token");
+    if (!params.type) throw Error("Type cannot be empty.");
 
     const result = await ctx.db.CreditCard.update(
       { type: params.type, number: params.number },
@@ -34,13 +36,13 @@ module.exports = {
     );
 
     if (!result[0]) {
-      return returnGenericResponse("updateCreditCardById", false, `CreditCard ID: ${params.id} failed to update.`);
+      throw Error(`CreditCard ID: ${params.id} failed to update.`);
     }
 
     return result[1][0].toJSON();
   },
   deleteCreditCardById: async (_parent, params, ctx) => {
-    if (!ctx.user) return returnGenericResponse("deleteCreditCardById", false, `Token not valid or missing.`);
+    if (!ctx.user) throw Error("Invalid token");
 
     try {
       const result = await ctx.db.CreditCard.destroy({
@@ -49,12 +51,12 @@ module.exports = {
       });
 
       if (!result.length) {
-        return returnGenericResponse("deleteCreditCardById", false, `CreditCard ID: ${params.id} doesn't exist.`);
+        throw Error(`CreditCard ID: ${params.id} doesn't exist.`);
       }
 
       return result[0].toJSON();
     } catch (error) {
-      return returnGenericResponse("deleteCreditCardById", false, error.message);
+      throw Error(error.message);
     }
   },
 };

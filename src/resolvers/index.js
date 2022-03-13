@@ -1,4 +1,3 @@
-import { returnGenericOrFallbackType } from "../utils";
 import {
   getAllSubscriptions,
   getSubscriptionById,
@@ -18,26 +17,6 @@ import { createTag, getAllTags, getTagById, updateTagById, deleteTagById } from 
 import { me } from "./user";
 
 module.exports = {
-  GenericUserResponse: {
-    __resolveType(obj) {
-      return returnGenericOrFallbackType(obj, "User");
-    },
-  },
-  GenericSubscriptionResponse: {
-    __resolveType(obj) {
-      return returnGenericOrFallbackType(obj, "Subscription");
-    },
-  },
-  GenericTagResponse: {
-    __resolveType(obj) {
-      return returnGenericOrFallbackType(obj, "Tag");
-    },
-  },
-  GenericCreditCardResponse: {
-    __resolveType(obj) {
-      return returnGenericOrFallbackType(obj, "CreditCard");
-    },
-  },
   Subscription: {
     creditCard: getCreditCardByParentId,
     tags: async (parent, _params, ctx) => {

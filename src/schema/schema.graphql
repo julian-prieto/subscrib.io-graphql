@@ -4,17 +4,6 @@ enum Frequency {
   YEARLY
 }
 
-union GenericUserResponse = GenericResponse | User
-union GenericCreditCardResponse = GenericResponse | CreditCard
-union GenericTagResponse = GenericResponse | Tag
-union GenericSubscriptionResponse = GenericResponse | Subscription
-
-type GenericResponse {
-  action: String!
-  success: Boolean
-  message: String!
-}
-
 type User {
   email: String!
   name: String!
@@ -49,7 +38,7 @@ type Subscription {
 }
 
 type Query {
-  me: GenericUserResponse!
+  me: User!
 
   subscription(id: ID!): Subscription
   subscriptions: [Subscription]
@@ -62,13 +51,13 @@ type Query {
 }
 
 type Mutation {
-  createCreditCard(type: String!, number: Int): GenericCreditCardResponse!
-  updateCreditCardById(id: ID!, type: String!, number: Int): GenericCreditCardResponse!
-  deleteCreditCardById(id: ID!): GenericCreditCardResponse!
+  createCreditCard(type: String!, number: Int): CreditCard!
+  updateCreditCardById(id: ID!, type: String!, number: Int): CreditCard!
+  deleteCreditCardById(id: ID!): CreditCard!
 
-  createTag(name: String!): GenericTagResponse!
-  updateTagById(id: ID!, name: String!): GenericTagResponse!
-  deleteTagById(id: ID!): GenericTagResponse!
+  createTag(name: String!): Tag!
+  updateTagById(id: ID!, name: String!): Tag!
+  deleteTagById(id: ID!): Tag!
 
   createSubscription(
     title: String!
@@ -78,7 +67,7 @@ type Mutation {
     creditCardId: String
     tags: [String]
     image: String
-  ): GenericSubscriptionResponse!
+  ): Subscription!
   updateSubscriptionById(
     id: ID!
     title: String!
@@ -88,6 +77,6 @@ type Mutation {
     creditCardId: String
     tags: [String]
     image: String
-  ): GenericSubscriptionResponse!
-  deleteSubscriptionById(id: ID!): GenericSubscriptionResponse!
+  ): Subscription!
+  deleteSubscriptionById(id: ID!): Subscription!
 }

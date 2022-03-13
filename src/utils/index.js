@@ -35,21 +35,3 @@ export const getUserData = async (token, db) => {
     return null;
   }
 };
-
-export const returnGenericResponse = (action, success, message) => {
-  const genericResponse = {
-    action,
-    success,
-    message,
-  };
-
-  return genericResponse;
-};
-
-export const returnGenericOrFallbackType = (obj, fallbackType) => {
-  if (obj.action || obj.success || obj.message) {
-    return "GenericResponse";
-  }
-
-  return fallbackType;
-};
