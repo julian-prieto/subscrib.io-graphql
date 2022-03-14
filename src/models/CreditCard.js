@@ -22,7 +22,7 @@ module.exports = (sequelize) => {
         allowNull: true,
       },
       number: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: true,
       },
       color: {

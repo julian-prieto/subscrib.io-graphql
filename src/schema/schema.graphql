@@ -15,7 +15,7 @@ type User {
 type CreditCard {
   id: ID!
   type: String
-  number: Int
+  number: String
   color: String
 }
 
@@ -49,8 +49,8 @@ type Query {
 }
 
 type Mutation {
-  createCreditCard(type: String, number: Int, color: String): CreditCard!
-  updateCreditCardById(id: ID!, type: String, number: Int, color: String): CreditCard!
+  createCreditCard(type: String, number: String, color: String): CreditCard!
+  updateCreditCardById(id: ID!, type: String, number: String, color: String): CreditCard!
   deleteCreditCardById(id: ID!): CreditCard!
 
   createTag(name: String!): Tag!
