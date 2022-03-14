@@ -18,7 +18,9 @@ import { me } from "./user";
 
 module.exports = {
   Subscription: {
-    creditCard: getCreditCardByParentId,
+    creditCard: async (parent, _params, ctx) => {
+      return ctx.dataLoaders.creditCard.load(parent.creditCardId);
+    },
     tags: async (parent, _params, ctx) => {
       return ctx.dataLoaders.tag.load(parent.tags);
     },

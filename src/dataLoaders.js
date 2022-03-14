@@ -1,19 +1,19 @@
 const DataLoader = require("dataloader");
 
 const dataLoaders = (db) => ({
-  // creditCard: new DataLoader(async (keys) => {
-  //   const creditCards = await db.CreditCard.findAll({
-  //     where: {
-  //       id: keys,
-  //     },
-  //   });
-  //   const creditCardsMap = {};
-  //   creditCards.forEach((tag) => {
-  //     creditCardsMap[tag.id] = tag;
-  //   });
+  creditCard: new DataLoader(async (keys) => {
+    const creditCards = await db.CreditCard.findAll({
+      where: {
+        id: keys,
+      },
+    });
+    const creditCardsMap = {};
+    creditCards.forEach((tag) => {
+      creditCardsMap[tag.id] = tag;
+    });
 
-  //   return keys.map((key) => creditCardsMap[key]);
-  // }),
+    return keys.map((key) => creditCardsMap[key]);
+  }),
   tag: new DataLoader(async (keys) => {
     const tags = await db.Tag.findAll({
       where: {
