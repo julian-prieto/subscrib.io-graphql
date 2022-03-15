@@ -50,12 +50,12 @@ type Query {
 
 type Mutation {
   createCreditCard(type: String, number: String, color: String): CreditCard!
-  updateCreditCardById(id: ID!, type: String, number: String, color: String): CreditCard!
-  deleteCreditCardById(id: ID!): CreditCard!
+  updateCreditCardById(id: ID!, type: String, number: String, color: String): CreditCard
+  deleteCreditCardById(id: ID!): CreditCard
 
   createTag(name: String!): Tag!
-  updateTagById(id: ID!, name: String!): Tag!
-  deleteTagById(id: ID!): Tag!
+  updateTagById(id: ID!, name: String!): Tag
+  deleteTagById(id: ID!): Tag
 
   createSubscription(
     title: String!
@@ -75,6 +75,6 @@ type Mutation {
     creditCardId: String
     tags: [String]
     image: String
-  ): Subscription!
-  deleteSubscriptionById(id: ID!): Subscription!
+  ): Subscription
+  deleteSubscriptionById(id: ID!): Subscription
 }

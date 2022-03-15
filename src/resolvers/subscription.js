@@ -7,7 +7,10 @@ module.exports = {
   getAllSubscriptions: async (_parent, _params, ctx) => {
     if (!ctx.user) throw Error("Invalid token");
 
-    return await ctx.db.Subscription.findAll({ where: { owner: ctx.user.email }, order: [["createdAt", "ASC"]] });
+    return await ctx.db.Subscription.findAll({
+      where: { owner: ctx.user.email },
+      order: [["createdAt", "ASC"]],
+    });
   },
   createSubscription: async (_parent, params, ctx) => {
     if (!ctx.user) throw Error("Invalid token");
@@ -43,7 +46,7 @@ module.exports = {
     );
 
     if (!result[0]) {
-      throw Error(`Subscription ID: ${params.id} failed to update.`);
+      return null;
     }
 
     return result[1][0].toJSON();

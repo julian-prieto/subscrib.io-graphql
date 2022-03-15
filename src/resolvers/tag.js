@@ -30,7 +30,7 @@ module.exports = {
     );
 
     if (!result[0]) {
-      if (!ctx.user) throw Error(`Tag ID: ${params.id} failed to update.`);
+      return null;
     }
 
     return result[1][0].toJSON();

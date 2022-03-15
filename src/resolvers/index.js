@@ -19,7 +19,7 @@ import { me } from "./user";
 module.exports = {
   Subscription: {
     creditCard: async (parent, _params, ctx) => {
-      return ctx.dataLoaders.creditCard.load(parent.creditCardId);
+      return parent.creditCardId ? ctx.dataLoaders.creditCard.load(parent.creditCardId) : null;
     },
     tags: async (parent, _params, ctx) => {
       return ctx.dataLoaders.tag.load(parent.tags);
