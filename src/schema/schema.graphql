@@ -4,6 +4,13 @@ enum Frequency {
   YEARLY
 }
 
+type Currency {
+  id: String!
+  name: String
+  rate: String
+  updatedDate: String
+}
+
 type User {
   email: String!
   name: String!
@@ -36,10 +43,12 @@ type Subscription {
 }
 
 type Query {
+  currencies: [Currency]
+
   me: User!
 
   subscription(id: ID!): Subscription
-  subscriptions: [Subscription]
+  subscriptions(convertToCurrency: String): [Subscription]
 
   creditCard(id: ID!): CreditCard
   creditCards: [CreditCard]

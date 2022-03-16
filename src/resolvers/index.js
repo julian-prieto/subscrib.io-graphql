@@ -8,13 +8,13 @@ import {
 import {
   getAllCreditCards,
   getCreditCardById,
-  getCreditCardByParentId,
   createCreditCard,
   updateCreditCardById,
   deleteCreditCardById,
 } from "./creditCard";
 import { createTag, getAllTags, getTagById, updateTagById, deleteTagById } from "./tag";
 import { me } from "./user";
+import { getAllCurrencies } from "./currencies";
 
 module.exports = {
   Subscription: {
@@ -26,6 +26,8 @@ module.exports = {
     },
   },
   Query: {
+    currencies: getAllCurrencies,
+
     me,
 
     subscription: getSubscriptionById,

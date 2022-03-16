@@ -1,16 +1,24 @@
+import { convertSubscriptionsToCurrency } from "../utils";
+
 module.exports = {
   getSubscriptionById: async (_parent, params, ctx) => {
     if (!ctx.user) throw Error("Invalid token");
 
     return await ctx.db.Subscription.findOne({ where: { id: params.id, owner: ctx.user.email } });
   },
-  getAllSubscriptions: async (_parent, _params, ctx) => {
+  getAllSubscriptions: async (_parent, params, ctx) => {
     if (!ctx.user) throw Error("Invalid token");
 
-    return await ctx.db.Subscription.findAll({
+    const result = await ctx.db.Subscription.findAll({
       where: { owner: ctx.user.email },
       order: [["createdAt", "ASC"]],
     });
+
+    if (params.convertToCurrency) {
+      return convertSubscriptionsToCurrency(result, params.convertToCurrency, ctx);
+    }
+
+    return result;
   },
   createSubscription: async (_parent, params, ctx) => {
     if (!ctx.user) throw Error("Invalid token");
