@@ -35,7 +35,9 @@ type Subscription {
   id: ID!
   title: String!
   price: Float!
+  priceDisplay: Float
   currency: String!
+  currencyDisplay: String
   tags: [Tag]
   frequency: Frequency!
   creditCard: CreditCard
@@ -74,6 +76,7 @@ type Mutation {
     creditCardId: String
     tags: [String]
     image: String
+    returnCurrency: String
   ): Subscription!
   updateSubscriptionById(
     id: ID!
@@ -84,6 +87,7 @@ type Mutation {
     creditCardId: String
     tags: [String]
     image: String
+    returnCurrency: String
   ): Subscription
   deleteSubscriptionById(id: ID!): Subscription
 }

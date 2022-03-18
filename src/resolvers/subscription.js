@@ -23,7 +23,7 @@ module.exports = {
   createSubscription: async (_parent, params, ctx) => {
     if (!ctx.user) throw Error("Invalid token");
 
-    return await ctx.db.Subscription.create({
+    const result = await ctx.db.Subscription.create({
       owner: ctx.user.email,
       title: params.title,
       price: params.price,
@@ -33,6 +33,12 @@ module.exports = {
       tags: params.tags,
       image: params.image,
     });
+
+    if (params.returnCurrency) {
+      const converted = await convertSubscriptionsToCurrency([result], params.returnCurrency, ctx);
+      return converted[0];
+    }
+    return result;
   },
   updateSubscriptionById: async (_parent, params, ctx) => {
     if (!ctx.user) throw Error("Invalid token");
@@ -55,6 +61,12 @@ module.exports = {
 
     if (!result[0]) {
       return null;
+    }
+
+    if (params.returnCurrency) {
+      const converted = await convertSubscriptionsToCurrency([result[1][0]], params.returnCurrency, ctx);
+
+      return converted[0];
     }
 
     return result[1][0].toJSON();

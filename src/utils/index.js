@@ -53,8 +53,8 @@ export const convertSubscriptionsToCurrency = async (subsFromDB, convertToCurren
     }, {});
   const subscriptions = subsFromDB.map((sub) => ({
     ...sub.toJSON(),
-    currency: convertToCurrency,
-    price: (
+    currencyDisplay: convertToCurrency,
+    priceDisplay: (
       (sub.price * parseFloat(currencies[convertToCurrency]).toFixed(2)) /
       parseFloat(currencies[sub.currency]).toFixed(2)
     ).toFixed(2),
