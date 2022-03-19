@@ -30,7 +30,15 @@ export const getUserData = async (token, db) => {
       },
     });
 
-    return dbUser.toJSON();
+    // return dbUser.toJSON();
+
+    return {
+      email: user.email,
+      name: user.name,
+      givenName: user.given_name,
+      familyName: user.family_name,
+      picture: user.picture,
+    };
   } catch (error) {
     return null;
   }
