@@ -50,7 +50,7 @@ type Query {
   me: User!
 
   subscription(id: ID!): Subscription
-  subscriptions(convertToCurrency: String): [Subscription]
+  subscriptions(convertToCurrency: String, tags: [String]): [Subscription]
 
   creditCard(id: ID!): CreditCard
   creditCards: [CreditCard]

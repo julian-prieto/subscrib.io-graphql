@@ -9,8 +9,16 @@ module.exports = {
   getAllSubscriptions: async (_parent, params, ctx) => {
     if (!ctx.user) throw Error("Invalid token");
 
+    const where = { owner: ctx.user.email };
+
+    if (params.tags) {
+      where.tags = {
+        [ctx.db.Sequelize.Op.contains]: params.tags,
+      };
+    }
+
     const result = await ctx.db.Subscription.findAll({
-      where: { owner: ctx.user.email },
+      where,
       order: [["createdAt", "ASC"]],
     });
 
