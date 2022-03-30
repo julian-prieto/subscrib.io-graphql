@@ -13,10 +13,10 @@ type Currency {
 
 type User {
   email: String!
-  name: String!
-  givenName: String!
-  familyName: String!
-  picture: String!
+  name: String
+  givenName: String
+  familyName: String
+  picture: String
 }
 
 type CreditCard {
