@@ -1,4 +1,4 @@
-import { convertSubscriptionsToCurrency } from "../utils";
+import { convertSubscriptionsToCurrency, getCostsByCurrency } from "../utils";
 
 module.exports = {
   getSubscriptionById: async (_parent, params, ctx) => {
@@ -26,7 +26,9 @@ module.exports = {
       return convertSubscriptionsToCurrency(result, params.convertToCurrency, ctx);
     }
 
-    return result;
+    const withCalculatedCurrencies = getCostsByCurrency(result, ctx);
+
+    return withCalculatedCurrencies;
   },
   createSubscription: async (_parent, params, ctx) => {
     if (!ctx.user) throw Error("Invalid token");

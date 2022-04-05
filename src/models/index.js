@@ -16,9 +16,19 @@ const sequelize = new Sequelize(
     dialect: "postgres",
     dialectModule: pg,
     dialectOptions: {
-      ssl: true,
+      ssl: process.env.POSTGRES_HOST === "localhost" ? false : true,
     },
     logging: false,
+
+    // logging: true,
+    // benchmark: true,
+    //
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
   }
 );
 

@@ -1,5 +1,7 @@
 import { OAuth2Client } from "google-auth-library";
-
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
 export const getUserData = async (token, db) => {
   let cleanToken;
 
@@ -19,26 +21,31 @@ export const getUserData = async (token, db) => {
     });
     const user = ticket.getPayload();
 
-    const [dbUser, _created] = await db.User.findOrCreate({
-      where: { email: user.email },
-      defaults: {
+    // const [dbUser, _created] = await db.User.findOrCreate({
+    //   where: { email: user.email },
+    //   defaults: {
+    //     email: user.email,
+    //     name: user.name,
+    //     givenName: user.given_name,
+    //     familyName: user.family_name,
+    //     picture: user.picture,
+    //   },
+    // });
+    const dbUser = await db.User.findOne({ where: { email: user.email } });
+
+    if (!dbUser) {
+      const newUser = await db.User.create({
         email: user.email,
         name: user.name,
         givenName: user.given_name,
         familyName: user.family_name,
         picture: user.picture,
-      },
-    });
+      });
 
-    // return dbUser.toJSON();
+      return newUser.toJSON();
+    }
 
-    return {
-      email: user.email,
-      name: user.name,
-      givenName: user.given_name,
-      familyName: user.family_name,
-      picture: user.picture,
-    };
+    return dbUser.toJSON();
   } catch (error) {
     return null;
   }
@@ -66,6 +73,31 @@ export const convertSubscriptionsToCurrency = async (subsFromDB, convertToCurren
       (sub.price * parseFloat(currencies[convertToCurrency]).toFixed(2)) /
       parseFloat(currencies[sub.currency]).toFixed(2)
     ).toFixed(2),
+  }));
+
+  return subscriptions;
+};
+
+export const getCostsByCurrency = async (subsFromDB, ctx) => {
+  const ALLOWED_CURRENCIES = ["USD", "EUR", "GBP", "ARS"];
+
+  const currenciesFromDB = await ctx.db.Currency.findAll();
+  const currencies = currenciesFromDB
+    .map((c) => c.toJSON())
+    .filter((c) => ALLOWED_CURRENCIES.includes(c.id))
+    .reduce((prev, curr) => {
+      return {
+        ...prev,
+        [curr.id]: curr.rate,
+      };
+    }, {});
+
+  const subscriptions = subsFromDB.map((sub) => ({
+    ...sub.toJSON(),
+    cost: Object.entries(currencies).map(([c, v]) => ({
+      currency: c,
+      value: (sub.price / currencies[sub.currency]) * currencies[c],
+    })),
   }));
 
   return subscriptions;

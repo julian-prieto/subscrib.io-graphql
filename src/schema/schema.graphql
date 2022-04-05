@@ -31,9 +31,15 @@ type Tag {
   name: String!
 }
 
+type Cost {
+  currency: String!
+  value: Float!
+}
+
 type Subscription {
   id: ID!
   title: String!
+  cost: [Cost!]
   price: Float!
   priceDisplay: Float
   currency: String!
