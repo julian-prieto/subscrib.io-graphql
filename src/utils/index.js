@@ -1,7 +1,11 @@
 import { OAuth2Client } from "google-auth-library";
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-}
+
+export const ALLOWED_CURRENCIES = ["USD", "EUR", "GBP", "ARS"];
+
+export const round = (value, decimals = 2) => {
+  return Number(Math.round(value + "e" + decimals) + "e-" + decimals);
+};
+
 export const getUserData = async (token, db) => {
   let cleanToken;
 
@@ -51,36 +55,7 @@ export const getUserData = async (token, db) => {
   }
 };
 
-export const convertSubscriptionsToCurrency = async (subsFromDB, convertToCurrency, ctx) => {
-  const currenciesFromSubscriptions = subsFromDB.map((s) => s.currency);
-  const uniqueCurrenciesToQuery = Array.from(new Set([convertToCurrency, ...currenciesFromSubscriptions]));
-  const currenciesFromDB = await ctx.db.Currency.findAll({
-    where: { id: uniqueCurrenciesToQuery },
-  });
-
-  const currencies = currenciesFromDB
-    .map((c) => c.toJSON())
-    .reduce((prev, curr) => {
-      return {
-        ...prev,
-        [curr.id]: curr.rate,
-      };
-    }, {});
-  const subscriptions = subsFromDB.map((sub) => ({
-    ...sub.toJSON(),
-    currencyDisplay: convertToCurrency,
-    priceDisplay: (
-      (sub.price * parseFloat(currencies[convertToCurrency]).toFixed(2)) /
-      parseFloat(currencies[sub.currency]).toFixed(2)
-    ).toFixed(2),
-  }));
-
-  return subscriptions;
-};
-
-export const getCostsByCurrency = async (subsFromDB, ctx) => {
-  const ALLOWED_CURRENCIES = ["USD", "EUR", "GBP", "ARS"];
-
+export const getCostsByCurrency = async (sub, ctx) => {
   const currenciesFromDB = await ctx.db.Currency.findAll();
   const currencies = currenciesFromDB
     .map((c) => c.toJSON())
@@ -92,11 +67,21 @@ export const getCostsByCurrency = async (subsFromDB, ctx) => {
       };
     }, {});
 
-  const subscriptions = subsFromDB.map((sub) => ({
+  if (!Array.isArray(sub)) {
+    return {
+      ...sub.toJSON(),
+      cost: Object.entries(currencies).map(([c]) => ({
+        currency: c,
+        value: round((sub.price / currencies[sub.currency]) * currencies[c]),
+      })),
+    };
+  }
+
+  const subscriptions = sub.map((sub) => ({
     ...sub.toJSON(),
-    cost: Object.entries(currencies).map(([c, v]) => ({
+    cost: Object.entries(currencies).map(([c]) => ({
       currency: c,
-      value: (sub.price / currencies[sub.currency]) * currencies[c],
+      value: round((sub.price / currencies[sub.currency]) * currencies[c]),
     })),
   }));
 

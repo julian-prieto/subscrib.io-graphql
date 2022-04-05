@@ -1,4 +1,4 @@
-import { convertSubscriptionsToCurrency, getCostsByCurrency } from "../utils";
+import { getCostsByCurrency } from "../utils";
 
 module.exports = {
   getSubscriptionById: async (_parent, params, ctx) => {
@@ -22,10 +22,6 @@ module.exports = {
       order: [["createdAt", "ASC"]],
     });
 
-    if (params.convertToCurrency) {
-      return convertSubscriptionsToCurrency(result, params.convertToCurrency, ctx);
-    }
-
     const withCalculatedCurrencies = getCostsByCurrency(result, ctx);
 
     return withCalculatedCurrencies;
@@ -44,11 +40,9 @@ module.exports = {
       image: params.image,
     });
 
-    if (params.returnCurrency) {
-      const converted = await convertSubscriptionsToCurrency([result], params.returnCurrency, ctx);
-      return converted[0];
-    }
-    return result;
+    const withCalculatedCurrencies = getCostsByCurrency(result, ctx);
+
+    return withCalculatedCurrencies;
   },
   updateSubscriptionById: async (_parent, params, ctx) => {
     if (!ctx.user) throw Error("Invalid token");
@@ -73,13 +67,9 @@ module.exports = {
       return null;
     }
 
-    if (params.returnCurrency) {
-      const converted = await convertSubscriptionsToCurrency([result[1][0]], params.returnCurrency, ctx);
+    const withCalculatedCurrencies = getCostsByCurrency(result[1][0], ctx);
 
-      return converted[0];
-    }
-
-    return result[1][0].toJSON();
+    return withCalculatedCurrencies;
   },
   deleteSubscriptionById: async (_parent, params, ctx) => {
     if (!ctx.user) throw Error("Invalid token");
